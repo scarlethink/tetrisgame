@@ -1,6 +1,7 @@
 import pygame
 
 from colors import beyaz, gri, renkler, siyah
+from game_state import State
 from tetris import Tetris
 
 # pygame'i başlatma
@@ -23,12 +24,6 @@ oyun = Tetris(
 sayac = 0  # Sayaç değişkeni; oyun döngüsünde süre veya koşul kontrolü için kullanılır
 
 asagiya_basma = False
-
-
-# Game states
-MAIN_MENU = 1
-INGAME = 2
-GAME_OVER = 3
 
 
 def handle_main_menu_events():
@@ -89,8 +84,7 @@ def render_ingame():
 
     # FPS ve oyun seviyesine göre aşağı hareket etmeyi kontrol et veya aşağı ok tuşuna basılıp basılmadığını kontrol et
     if sayac % (fps // oyun.level // 2) == 0 or asagiya_basma:
-        if oyun.state == "başla":
-            oyun.asagi()
+        oyun.asagi()
 
     # Ekranı beyaz ile doldur
     ekran.fill(beyaz)
@@ -142,22 +136,23 @@ def render_game_over():
     text_game_over1 = font1.render("ESC bas", True, (255, 215, 0))
 
     ekran.blit(text, [0, 0])
-    if oyun.state == "oyunover":
-        ekran.blit(text_game_over, [20, 200])
-        ekran.blit(text_game_over1, [25, 265])
+    ekran.blit(text_game_over, [20, 200])
+    ekran.blit(text_game_over1, [25, 265])
 
 
 while True:
-    handle_ingame_events()
-    render_ingame()
+    if oyun.state == State.MAIN_MENU:
+        print()
+
+    elif oyun.state == State.INGAME:
+        handle_ingame_events()
+        render_ingame()
+
+    elif oyun.state == State.GAME_OVER:
+        render_game_over()
 
     # Ekranı güncelle
     pygame.display.update()
 
     # FPS kontrolü
     zamanlayici.tick(fps)
-
-
-pygame.display.update()  # <--- Add this line
-
-pygame.quit()

@@ -1,4 +1,5 @@
 from figure import Figür
+from game_state import State
 
 
 # Tetris oyun sınıfı
@@ -6,7 +7,7 @@ class Tetris:
     def __init__(self, height, width):
         self.level = 2
         self.score = 0
-        self.state = "başla"
+        self.state = State.INGAME
         self.field = []  # Oyun alanının 2 boyutlu matrisi
         self.height = height
         self.width = width
@@ -75,7 +76,7 @@ class Tetris:
         self.satirlari_temizle()
         self.new_figure()
         if self.sinir_kontrolu():
-            self.state = "oyunover"
+            self.state = State.GAME_OVER
 
     def yatay(self, dx):
         old_x = self.figure.x
