@@ -13,7 +13,6 @@ ekran = pygame.display.set_mode(boyut)
 pygame.display.set_caption("Tetris")
 
 # Kullanıcı pencereyi kapatana kadar döngü devam eder
-oyun_dongusu_bitti_mi = False  # Oyun döngüsünün bitip bitmediğini kontrol eden bayrak
 zamanlayici = (
     pygame.time.Clock()
 )  # Oyun içindeki zamanlamayı ve FPS kontrolünü sağlayan nesne
@@ -44,7 +43,7 @@ def handle_game_over_events():
     print()
 
 
-while not oyun_dongusu_bitti_mi:
+while True:
 
     # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
     if oyun.figure is None:
@@ -66,7 +65,7 @@ while not oyun_dongusu_bitti_mi:
     for event in pygame.event.get():
         # Pencere kapatıldığında döngüyü bitir
         if event.type == pygame.QUIT:
-            oyun_dongusu_bitti_mi = True
+            pygame.quit()
         # Klavye tuşlarına basıldığında çeşitli işlemleri yap
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
@@ -82,7 +81,7 @@ while not oyun_dongusu_bitti_mi:
             if event.key == pygame.K_SPACE:
                 oyun.sekil_dusurme()  # Boşluk tuşuna basıldığında şekli hızlıca aşağıya hareket ettir
             if event.key == pygame.K_ESCAPE:
-                oyun_dongusu_bitti_mi = True  # ESC tuşuna basıldığında oyunu kapat
+                pygame.quit()
 
         # Tuş bırakıldığında aşağı hareketi hızlandırmayı durdur
         if event.type == pygame.KEYUP:
