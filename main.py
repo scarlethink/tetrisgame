@@ -31,6 +31,19 @@ MAIN_MENU = 1
 INGAME = 2
 GAME_OVER = 3
 
+
+def handle_main_menu_events():
+    print()
+
+
+def handle_ingame_events():
+    print()
+
+
+def handle_game_over_events():
+    print()
+
+
 while not oyun_dongusu_bitti_mi:
 
     # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
