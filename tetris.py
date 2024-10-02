@@ -1,5 +1,6 @@
-import pygame
 import random
+
+import pygame
 
 # pygame'i başlatma
 pygame.init()
@@ -14,6 +15,7 @@ renkler = [
     (180, 34, 22),  # Kırmızı
     (180, 34, 122),  # Pembe
 ]
+
 
 # Figür sınıfı oyun içindeki şekilleri temsil eder
 class Figür:
@@ -42,6 +44,7 @@ class Figür:
         [[1, 2, 5, 6]],  # L şekli
     ]
 
+
 # Tetris oyun sınıfı
 class Tetris:
     def __init__(self, height, width):
@@ -55,7 +58,7 @@ class Tetris:
         self.y = 60
         self.zoom = 20
         self.figure = None
-        
+
         # Oyun alanını sıfırlarla doldur
         for i in range(height):
             new_line = []
@@ -66,15 +69,19 @@ class Tetris:
     def new_figure(self):
         self.figure = Figür(3, 0)
 
-    def sinir_kontrolu(self):  # Oyun alanındaki sınırları veya diğer şekillerle çakışıp çakışmadığını kontrol eder
+    def sinir_kontrolu(
+        self,
+    ):  # Oyun alanındaki sınırları veya diğer şekillerle çakışıp çakışmadığını kontrol eder
         sinir_kontrolu = False
         for i in range(4):
             for j in range(4):
                 if i * 4 + j in self.figure.image():
-                    if i + self.figure.y > self.height - 1 or \
-                            j + self.figure.x > self.width - 1 or \
-                            j + self.figure.x < 0 or \
-                            self.field[i + self.figure.y][j + self.figure.x] > 0:
+                    if (
+                        i + self.figure.y > self.height - 1
+                        or j + self.figure.x > self.width - 1
+                        or j + self.figure.x < 0
+                        or self.field[i + self.figure.y][j + self.figure.x] > 0
+                    ):
                         sinir_kontrolu = True
         return sinir_kontrolu
 
@@ -90,7 +97,7 @@ class Tetris:
                 for i1 in range(i, 1, -1):
                     for j in range(self.width):
                         self.field[i1][j] = self.field[i1 - 1][j]
-        self.score += lines ** 2
+        self.score += lines**2
 
     def sekil_dusurme(self):
         while not self.sinir_kontrolu():
@@ -126,6 +133,7 @@ class Tetris:
         if self.sinir_kontrolu():
             self.figure.rotation = old_rotation
 
+
 # Ekstra renkler
 siyah = (0, 0, 0)
 beyaz = (255, 255, 255)
@@ -138,22 +146,26 @@ pygame.display.set_caption("Tetris")
 
 # Kullanıcı pencereyi kapatana kadar döngü devam eder
 oyun_dongusu_bitti_mi = False  # Oyun döngüsünün bitip bitmediğini kontrol eden bayrak
-zamanlayici = pygame.time.Clock()  # Oyun içindeki zamanlamayı ve FPS kontrolünü sağlayan nesne
+zamanlayici = (
+    pygame.time.Clock()
+)  # Oyun içindeki zamanlamayı ve FPS kontrolünü sağlayan nesne
 fps = 25  # Saniyedeki kare sayısı
-oyun = Tetris(20, 10)  # Tetris oyun nesnesini oluşturur; oyun tahtası 20 yüksekliğinde ve 10 genişliğinde
+oyun = Tetris(
+    20, 10
+)  # Tetris oyun nesnesini oluşturur; oyun tahtası 20 yüksekliğinde ve 10 genişliğinde
 sayac = 0  # Sayaç değişkeni; oyun döngüsünde süre veya koşul kontrolü için kullanılır
 
 asagiya_basma = False
 
 while not oyun_dongusu_bitti_mi:
-    
+
     # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
     if oyun.figure is None:
         oyun.new_figure()
-    
+
     # Sayaç değerini artır
     sayac += 1
-    
+
     # Sayaç çok büyükse sıfırla
     if sayac > 100000:
         sayac = 0
@@ -173,7 +185,9 @@ while not oyun_dongusu_bitti_mi:
             if event.key == pygame.K_UP:
                 oyun.rotate()  # Yukarı ok tuşuna basıldığında şekli döndür
             if event.key == pygame.K_DOWN:
-                asagiya_basma = True  # Aşağı ok tuşuna basıldığında aşağıya hareketi hızlandır
+                asagiya_basma = (
+                    True  # Aşağı ok tuşuna basıldığında aşağıya hareketi hızlandır
+                )
             if event.key == pygame.K_LEFT:
                 oyun.yatay(-1)  # Sol ok tuşuna basıldığında şekli sola hareket ettir
             if event.key == pygame.K_RIGHT:
@@ -181,7 +195,7 @@ while not oyun_dongusu_bitti_mi:
             if event.key == pygame.K_SPACE:
                 oyun.sekil_dusurme()  # Boşluk tuşuna basıldığında şekli hızlıca aşağıya hareket ettir
             if event.key == pygame.K_ESCAPE:
-                oyun_dongusu_bitti_mi = True  # ESC tuşuna basıldığında oyunu kapat 
+                oyun_dongusu_bitti_mi = True  # ESC tuşuna basıldığında oyunu kapat
 
         # Tuş bırakıldığında aşağı hareketi hızlandırmayı durdur
         if event.type == pygame.KEYUP:
@@ -194,10 +208,23 @@ while not oyun_dongusu_bitti_mi:
     # Oyun tahtasını çiz
     for i in range(oyun.height):
         for j in range(oyun.width):
-            pygame.draw.rect(ekran, gri, [oyun.x + oyun.zoom * j, oyun.y + oyun.zoom * i, oyun.zoom, oyun.zoom], 1)
+            pygame.draw.rect(
+                ekran,
+                gri,
+                [oyun.x + oyun.zoom * j, oyun.y + oyun.zoom * i, oyun.zoom, oyun.zoom],
+                1,
+            )
             if oyun.field[i][j] > 0:
-                pygame.draw.rect(ekran, renkler[oyun.field[i][j]],
-                                 [oyun.x + oyun.zoom * j + 1, oyun.y + oyun.zoom * i + 1, oyun.zoom - 2, oyun.zoom - 2])
+                pygame.draw.rect(
+                    ekran,
+                    renkler[oyun.field[i][j]],
+                    [
+                        oyun.x + oyun.zoom * j + 1,
+                        oyun.y + oyun.zoom * i + 1,
+                        oyun.zoom - 2,
+                        oyun.zoom - 2,
+                    ],
+                )
 
     # Mevcut şekli çiz
     if oyun.figure is not None:
@@ -205,10 +232,16 @@ while not oyun_dongusu_bitti_mi:
             for j in range(4):
                 p = i * 4 + j
                 if p in oyun.figure.image():
-                    pygame.draw.rect(ekran, renkler[oyun.figure.color],
-                                     [oyun.x + oyun.zoom * (j + oyun.figure.x) + 1,
-                                      oyun.y + oyun.zoom * (i + oyun.figure.y) + 1,
-                                      oyun.zoom - 2, oyun.zoom - 2])
+                    pygame.draw.rect(
+                        ekran,
+                        renkler[oyun.figure.color],
+                        [
+                            oyun.x + oyun.zoom * (j + oyun.figure.x) + 1,
+                            oyun.y + oyun.zoom * (i + oyun.figure.y) + 1,
+                            oyun.zoom - 2,
+                            oyun.zoom - 2,
+                        ],
+                    )
 
     # Ekranı güncelle
     pygame.display.update()
@@ -217,8 +250,8 @@ while not oyun_dongusu_bitti_mi:
     zamanlayici.tick(fps)
 
     # Skor ve oyun bitti mesajlarını ekranda güncelle
-    font = pygame.font.SysFont('Arial', 25, True, False)
-    font1 = pygame.font.SysFont('Arial', 65, True, False)
+    font = pygame.font.SysFont("Arial", 25, True, False)
+    font1 = pygame.font.SysFont("Arial", 65, True, False)
     text = font.render("Skor: " + str(oyun.score), True, siyah)
     text_game_over = font1.render("Kaybettin", True, (255, 125, 0))
     text_game_over1 = font1.render("ESC bas", True, (255, 215, 0))
@@ -229,5 +262,5 @@ while not oyun_dongusu_bitti_mi:
         ekran.blit(text_game_over1, [25, 265])
 
 pygame.display.update()  # <--- Add this line
-    
+
 pygame.quit()
