@@ -25,6 +25,12 @@ sayac = 0  # Sayaç değişkeni; oyun döngüsünde süre veya koşul kontrolü 
 
 asagiya_basma = False
 
+
+# Game states
+MAIN_MENU = 1
+INGAME = 2
+GAME_OVER = 3
+
 while not oyun_dongusu_bitti_mi:
 
     # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
