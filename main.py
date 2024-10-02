@@ -69,8 +69,13 @@ def handle_game_over_events():
     print()
 
 
-while True:
-    handle_ingame_events()
+def render_main_menu():
+    print()
+
+
+def render_ingame():
+    global sayac
+
     # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
     if oyun.figure is None:
         oyun.new_figure()
@@ -89,7 +94,6 @@ while True:
 
     # Ekranı beyaz ile doldur
     ekran.fill(beyaz)
-
     # Oyun tahtasını çiz
     for i in range(oyun.height):
         for j in range(oyun.width):
@@ -128,12 +132,8 @@ while True:
                         ],
                     )
 
-    # Ekranı güncelle
-    pygame.display.update()
 
-    # FPS kontrolü
-    zamanlayici.tick(fps)
-
+def render_game_over():
     # Skor ve oyun bitti mesajlarını ekranda güncelle
     font = pygame.font.SysFont("Arial", 25, True, False)
     font1 = pygame.font.SysFont("Arial", 65, True, False)
@@ -145,6 +145,18 @@ while True:
     if oyun.state == "oyunover":
         ekran.blit(text_game_over, [20, 200])
         ekran.blit(text_game_over1, [25, 265])
+
+
+while True:
+    handle_ingame_events()
+    render_ingame()
+
+    # Ekranı güncelle
+    pygame.display.update()
+
+    # FPS kontrolü
+    zamanlayici.tick(fps)
+
 
 pygame.display.update()  # <--- Add this line
 
