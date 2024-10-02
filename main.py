@@ -61,7 +61,13 @@ def handle_ingame_events():
 
 
 def handle_game_over_events():
-    print()
+    for event in pygame.event.get():
+        # Pencere kapatıldığında döngüyü bitir
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
 
 
 def render_main_menu():
@@ -149,6 +155,7 @@ while True:
         render_ingame()
 
     elif oyun.state == State.GAME_OVER:
+        handle_game_over_events()
         render_game_over()
 
     # Ekranı güncelle
