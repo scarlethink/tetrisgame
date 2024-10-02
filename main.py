@@ -36,31 +36,7 @@ def handle_main_menu_events():
 
 
 def handle_ingame_events():
-    print()
-
-
-def handle_game_over_events():
-    print()
-
-
-while True:
-
-    # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
-    if oyun.figure is None:
-        oyun.new_figure()
-
-    # Sayaç değerini artır
-    sayac += 1
-
-    # Sayaç çok büyükse sıfırla
-    if sayac > 100000:
-        sayac = 0
-
-    # FPS ve oyun seviyesine göre aşağı hareket etmeyi kontrol et veya aşağı ok tuşuna basılıp basılmadığını kontrol et
-    if sayac % (fps // oyun.level // 2) == 0 or asagiya_basma:
-        if oyun.state == "başla":
-            oyun.asagi()
-
+    global asagiya_basma
     # pygame olaylarını kontrol et
     for event in pygame.event.get():
         # Pencere kapatıldığında döngüyü bitir
@@ -87,6 +63,29 @@ while True:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 asagiya_basma = False
+
+
+def handle_game_over_events():
+    print()
+
+
+while True:
+    handle_ingame_events()
+    # Eğer mevcut bir şekil yoksa yeni bir şekil oluştur
+    if oyun.figure is None:
+        oyun.new_figure()
+
+    # Sayaç değerini artır
+    sayac += 1
+
+    # Sayaç çok büyükse sıfırla
+    if sayac > 100000:
+        sayac = 0
+
+    # FPS ve oyun seviyesine göre aşağı hareket etmeyi kontrol et veya aşağı ok tuşuna basılıp basılmadığını kontrol et
+    if sayac % (fps // oyun.level // 2) == 0 or asagiya_basma:
+        if oyun.state == "başla":
+            oyun.asagi()
 
     # Ekranı beyaz ile doldur
     ekran.fill(beyaz)
